@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  
+      <title>redux原理理解(一) - KK的博客</title>
+  
+
+  
+  
+  <meta name="description" content="MandyJin的博客">
+  <meta name="author" content="靳莹莹">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- load loadjs.js -->
+  <script src="/libs/loadjs/dist/loadjs.min.js"></script>
+
+
+<link rel="stylesheet" href="/libs/animate.css/animate.min.css">
+  <!-- load lightgallery -->
+<link rel="stylesheet" href="/css/lightgallery.css">
+<link rel="stylesheet" href="/libs/noty/lib/noty.css">
+<script
+src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+crossorigin="anonymous"></script>
+  
+
+
+
+
+
+
+    <link rel="stylesheet" href="/css/taurus.css">
+    
+        <link rel="stylesheet" href="/css/scheme-taurus/animations.css">
+    
+
+
+ 
+
+  <!-- load font awesome 5 -->
+  <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+  });
+  </script>
+  <!-- load mathjax -->
+  <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax//libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+  <!-- load js-cookie -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="/js/social-share.min.js"></script>
+    <script src="/js/theme.js"></script>
+
+  <!-- include cookie.js -->
+  
+  
+
+  <!-- include comment system code -->
+  
+    <script src="//cdn1.lncld.net/static/js/3.6.4/av-min.js"></script>
+<script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+  
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh;">
+
+ 
+
+<header id="header" class='header'>
+	<div class="header-title">
+		
+		<div class='header-logo'>
+			<a href='/'>
+				<img src='/images/theme-icon.svg' />
+			</a>
+		</div>
+		<div class='header-text'>
+			<h1>
+				<a href="/">KK的博客</a>
+			</h1>
+			<subtitle>
+				
+			</subtitle>
+		</div>
+		
+	</div>
+	<div id='header-nav'>
+		
+
+
+
+<nav id="nav">
+	
+	
+	
+	<div class='nav-item' id='nav-item-toc'>
+		
+
+
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">createStore的简单实现</span></a></li></ol>
+<div class="toc-button" onclick='toggleTOC(event);' ontouchstart='toggleTOC(event);'>
+    <img src="/images/icons/blue-shadow/toc.svg" alt="">
+</div>
+
+	</div>
+	
+	<div class='nav-item' id='nav-item-archive'>
+		
+				<div class='nav-icon'>
+				
+			<a href="/archives/" title='Archives'>
+			<img src="/images/icons/blue-shadow/archive.svg" alt="">
+			</a>
+		</div>
+	</div>
+	<div class='nav-item' id='nav-item-search'>
+		
+		<div class='nav-icon'>
+		
+			<a href="/search/" title='Search'>
+			<img src="/images/icons/blue-shadow/search.svg" alt="">
+			</a>
+		</div>
+	</div>
+	<div class="nav-item" id='nav-item-more'>
+		<div class="nav-icon">
+				<a href='#' onclick='onClickMenuIcon(event);' ontouchstart='onClickMenuIcon(event);'>
+				<img src="/images/icons/blue-shadow/menu.svg" alt="">
+				</a>
+		</div>
+		<div class="nav-more-menu">
+		
+		
+	</div>
+	</div>
+</nav>
+
+	</div>
+</header>
+
+ 
+
+  
+
+
+
+
+  <!-- Primary Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div style="flex: 1;">
+      <style>
+    body {
+        background-color: white;
+    }
+</style>
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+
+
+    
+    
+        
+    
+
+    
+        
+    
+
+
+
+
+
+
+
+
+
+<article class="article" id="/2018/03/25/redux-theory/" data-name='redux原理理解(一)' data-version="">
+
+    <!-- Title -->
+    <div class='article-header'>
+         
+         <h1 class='article-title'>
+            <a href="/2018/03/25/redux-theory/">
+                Redux原理理解(一)
+            </a>
+        </h1>
+        <!-- TODO: support nested categories,display them nicely -->
+        
+    </div>
+    
+    <!-- Date and Author -->
+    <div class='article-meta'>
+    <ul>
+            <li><i class='fa fa-calendar'></i> Mar 25, 2018</li>
+            
+            <li><i class="fa fa-user"></i> 靳莹莹</li>
+            <li><i class="fas fa-copyright"></i>
+            
+                
+                
+            
+            
+                <a href=https://creativecommons.org/licenses/by-nc-nd/4.0/>CC BY-NC-ND 4.0</a>
+            
+            </li>
+    </ul>
+    
+    </div>
+    <div class='article-cards'>
+        <!-- Author Card -->
+        <!---
+        <div class='Card-article Card-author'>
+            <div class='card-title'>
+                <h3></h3>
+            </div>
+            <div class='card-content'>
+                    <div class="author-meta">
+                            <div class='author-figure'>
+                                <img src="" alt="">
+                            </div>
+                            <div class='author-name'>
+                                靳莹莹
+                            </div>
+                        </div>
+                        <div class="author-ai">
+                            <div class='author-intro'>
+                                <!-- TODO: auto generating author description -->
+                                <!-- 
+                            </div>
+                            <div class="author-articles">
+                                <!-- TODO: auto generating author articles -->
+                                <!-- <ul>
+                                    <li>Article 1</li>
+                                    <li>Article 2</li>
+                                    <li>Article 3</li>
+                                    <li>Article 4</li>
+                                    <li>Article 5</li>
+                                    <li>Article 6</li>
+                                </ul>
+                            </div>
+                        </div>
+            </div>
+            
+        </div> -->
+
+        <!-- Visit Card -->
+        <!-- <div class="Card-article Card-visit"> -->
+            <!-- <div class="card-title">
+  <h3>Post Visit</h3>
+</div>
+<div class="card-chart">
+  <div id='chart-post-visit'></div>
+</div> -->
+        <!-- </div> -->
+        
+        <!-- Auto Excerpt Card -->
+        <!-- <div class="Card-article Card-excerpt">
+            <div class="card-title">
+  <h3>Quick Read</h3>
+</div>
+<div class="card-text">
+  <p id='text-post-summary'>前言
+
+
+reducer和react-reducer是两个概念，建议看看阮一峰-redux,阮一峰-react-redux，关于使用我也在探索中
+
+
+REDUX是用来进行状态统一管理的组件
+
+
+REACT-REDUX是把REDUX进一步封装，使其在REACT项目中可以快速应用
+
+
+这篇文章并不是直接分析源码，而是从简单的ES6代码到模拟react原理，一步步分析其思想原理，建议自己敲一遍，高手可以直接看文章最后的原理部分
+
+
+这里一共有六部分代码，循序渐进:
+第一次：
+123456789101112//一个普通的render函数function render() &#123;  let...</p>
+</div>
+        </div> -->
+    </div>
+    
+    <!-- Gallery -->
+    <!-- TODO: add a slider to gallery -->
+    
+
+    <!-- Content -->
+    <!-- TODO: support table of content -->
+    <div class="article-toc" id='article-toc'>
+        
+
+
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">createStore的简单实现</span></a></li></ol>
+<div class="toc-button" onclick='toggleTOC(event);' ontouchstart='toggleTOC(event);'>
+    <img src="/images/icons/blue-shadow/toc.svg" alt="">
+</div>
+
+    </div>
+    <div class='article-content'>
+    <h3>前言</h3>
+<ul>
+<li>
+<p>reducer和react-reducer是两个概念，建议看看<a href="http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_one_basic_usages.html" target="_blank" rel="noopener">阮一峰-redux</a>,<a href="http://www.ruanyifeng.com/blog/2016/09/redux_tutorial_part_three_react-redux.html" target="_blank" rel="noopener">阮一峰-react-redux</a>，关于使用我也在探索中</p>
+</li>
+<li>
+<p>REDUX是用来进行状态统一管理的组件</p>
+</li>
+<li>
+<p>REACT-REDUX是把REDUX进一步封装，使其在REACT项目中可以快速应用</p>
+</li>
+<li>
+<p>这篇文章并不是直接分析源码，而是从简单的ES6代码到模拟react原理，一步步分析其思想原理，建议自己敲一遍，高手可以直接看文章最后的原理部分</p>
+</li>
+</ul>
+<p>这里一共有六部分代码，循序渐进:
+<code>第一次</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//一个普通的render函数</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> titleState=&#123;<span class="attr">text</span>:<span class="string">"前端学习之路"</span>,<span class="attr">color</span>:<span class="string">"red"</span>&#125;;</span><br><span class="line">  <span class="keyword">let</span> contentState=&#123;<span class="attr">text</span>:<span class="string">"CSS,HTML,JS,NODE,VUE,REACT"</span>,<span class="attr">color</span>:<span class="string">"green"</span>&#125;;</span><br><span class="line">  <span class="keyword">let</span> title=<span class="built_in">document</span>.getElementById(<span class="string">"title"</span>);</span><br><span class="line">  title.innerHTML=titleState.text;</span><br><span class="line">  title.style.color=titleState.color;</span><br><span class="line">  <span class="keyword">let</span> content=<span class="built_in">document</span>.getElementById(<span class="string">"content"</span>);</span><br><span class="line">  content.innerHTML=contentState.text;</span><br><span class="line">  content.style.color=contentState.color;</span><br><span class="line">&#125;</span><br><span class="line">render();</span><br></pre></td></tr></table></figure>
+<p><code>第二次</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//将title和content拿出来，模拟组件</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Title</span>(<span class="params">titleState</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> title=<span class="built_in">document</span>.getElementById(<span class="string">"title"</span>);</span><br><span class="line">  title.innerHTML=titleState.text;</span><br><span class="line">  title.style.color=titleState.color;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Content</span>(<span class="params">contentState</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> content=<span class="built_in">document</span>.getElementById(<span class="string">"content"</span>);</span><br><span class="line">  content.innerHTML=contentState.text;</span><br><span class="line">  content.style.color=contentState.color;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> titleState=&#123;<span class="attr">text</span>:<span class="string">"前端学习之路"</span>,<span class="attr">color</span>:<span class="string">"red"</span>&#125;;</span><br><span class="line">  <span class="keyword">let</span> contentState=&#123;<span class="attr">text</span>:<span class="string">"CSS,HTML,JS,NODE,VUE,REACT"</span>,<span class="attr">color</span>:<span class="string">"green"</span>&#125;;</span><br><span class="line">  Title(titleState);</span><br><span class="line">  Content(contentState);</span><br><span class="line">&#125;</span><br><span class="line">render();</span><br></pre></td></tr></table></figure>
+<p><code>第三次</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将状态统一管理</span></span><br><span class="line"><span class="comment">//上一次的state，任何组件都可以拿来修改，容易混乱，先提取出来，只有dispatch方法才可以修改state</span></span><br><span class="line"><span class="comment">// state=&gt;对照阮一峰的博客理解其概念</span></span><br><span class="line"><span class="comment">// 载荷：作用于state使其发生改变</span></span><br><span class="line"><span class="comment">// 修改状态不可以直接修改 直接调用dispatch去修改状态 </span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createStore</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> state=&#123;</span><br><span class="line">    titleState:&#123;<span class="attr">text</span>:<span class="string">"前端学习之路"</span>,<span class="attr">color</span>:<span class="string">"red"</span>&#125;,</span><br><span class="line">    contentState:&#123;<span class="attr">text</span>:<span class="string">"CSS,HTML,JS,NODE,VUE,REACT"</span>,<span class="attr">color</span>:<span class="string">"green"</span>&#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="comment">//要求 传一个参数 action 一个对象&#123;type:"修改某个状态的标志",其他的参数是修改后的值(载荷)&#125;</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (action.type)&#123;</span><br><span class="line">      <span class="keyword">case</span> TITLE_CHANGE_TEXT:</span><br><span class="line">        state=&#123;...state,<span class="attr">titleState</span>:&#123;...state.titleState,<span class="attr">text</span>:action.text&#125;&#125;;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> TITLE_CHANGE_COLOR:</span><br><span class="line">        state=&#123;...state,<span class="attr">titleState</span>:&#123;...state.titleState,<span class="attr">color</span>:action.color&#125;&#125;;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> CONTENT_CHANGE_TEXT:</span><br><span class="line">        state=&#123;...state,<span class="attr">contentState</span>:&#123;...state.contentState,<span class="attr">text</span>:action.text&#125;&#125;;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//为了防止 state泄漏 外面可以修改 ,需要一个跟state长的一样的对象 但是地址不一样[深拷贝]</span></span><br><span class="line">  <span class="keyword">let</span> getState=<span class="function"><span class="params">()</span>=&gt;</span>(<span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(state)));</span><br><span class="line">  <span class="keyword">return</span> &#123;dispatch,getState&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> TITLE_CHANGE_TEXT=<span class="string">"title_change_text"</span>;</span><br><span class="line"><span class="keyword">const</span> TITLE_CHANGE_COLOR=<span class="string">"title_change_color"</span>;</span><br><span class="line"><span class="keyword">const</span> CONTENT_CHANGE_TEXT=<span class="string">"content_change_text"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//创建容器</span></span><br><span class="line"><span class="keyword">let</span> store=createStore();</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Title</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> title=<span class="built_in">document</span>.getElementById(<span class="string">"title"</span>);</span><br><span class="line">  <span class="comment">//如果是state.state.xxx=xxx,容易使状态管理混乱，只能通过store.getState()方法修改，因为并不是真实的地址值</span></span><br><span class="line">  title.innerHTML=store.getState().titleState.text;</span><br><span class="line">  title.style.color=store.getState().titleState.color;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Content</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> content=<span class="built_in">document</span>.getElementById(<span class="string">"content"</span>);</span><br><span class="line">  content.innerHTML=store.getState().contentState.text;</span><br><span class="line">  content.style.color=store.getState().contentState.color;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  Title();</span><br><span class="line">  Content();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">  store.dispatch(&#123;<span class="attr">type</span>:TITLE_CHANGE_TEXT,<span class="attr">text</span>:<span class="string">"其实前端很好玩~"</span>&#125;);</span><br><span class="line">  store.dispatch(&#123;<span class="attr">type</span>:TITLE_CHANGE_COLOR,<span class="attr">color</span>:<span class="string">"blue"</span>&#125;);</span><br><span class="line">  store.dispatch(&#123;<span class="attr">type</span>:CONTENT_CHANGE_TEXT,<span class="attr">text</span>:<span class="string">"html+css+js+node+vue+react"</span>&#125;);</span><br><span class="line">  render();</span><br><span class="line">&#125;,<span class="number">3000</span>);</span><br><span class="line">render();</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>createStore =&gt;用来生成store,store用来存储数据</strong></li>
+<li><strong>store.getState =&gt;当前时刻的state</strong></li>
+<li><strong>action =&gt;一个对象，是View(用户)发出的通知，表示state要发生变化了</strong></li>
+<li><strong>store.dispatch()是 View 发出 Action 的唯一方法</strong></li>
+</ul>
+<hr>
+<p>理清楚上面的概念后，我们看看还需要什么</p>
+<p><code>第四次</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//createStore是redux提供的一个函数，不可能修改其源码，状态应该拿出来</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createStore</span>(<span class="params">reducer</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> state;</span><br><span class="line">  <span class="comment">//默认第一次先执行一个dispatch</span></span><br><span class="line">  dispatch(&#123;&#125;);<span class="comment">//为了防止 action是一个undefined 而undefined.type就会报错</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//reducer作用就是修改 state用的</span></span><br><span class="line">    state=reducer(state,action)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> getState=<span class="function"><span class="params">()</span>=&gt;</span>(<span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(state)));</span><br><span class="line">  <span class="keyword">return</span> &#123;dispatch,getState&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> TITLE_CHANGE_TEXT=<span class="string">"title_change_text"</span>;</span><br><span class="line"><span class="keyword">const</span> TITLE_CHANGE_COLOR=<span class="string">"title_change_color"</span>;</span><br><span class="line"><span class="keyword">const</span> CONTENT_CHANGE_TEXT=<span class="string">"content_change_text"</span>;</span><br><span class="line"><span class="keyword">let</span> initState=&#123;</span><br><span class="line">  titleState:&#123;<span class="attr">text</span>:<span class="string">"前端学习之路"</span>,<span class="attr">color</span>:<span class="string">"red"</span>&#125;,</span><br><span class="line">  contentState:&#123;<span class="attr">text</span>:<span class="string">"CSS,HTML,JS,NODE,VUE,REACT"</span>,<span class="attr">color</span>:<span class="string">"green"</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">state=initState,action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type)&#123;</span><br><span class="line">    <span class="keyword">case</span> TITLE_CHANGE_TEXT:</span><br><span class="line">      <span class="comment">//return 一个修改后的state</span></span><br><span class="line">      <span class="keyword">return</span> &#123;...state,<span class="attr">titleState</span>:&#123;...state.titleState,<span class="attr">text</span>:action.text&#125;&#125;;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> TITLE_CHANGE_COLOR:</span><br><span class="line">      <span class="keyword">return</span> &#123;...state,<span class="attr">titleState</span>:&#123;...state.titleState,<span class="attr">color</span>:action.color&#125;&#125;;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> CONTENT_CHANGE_TEXT:</span><br><span class="line">      <span class="keyword">return</span> &#123;...state,<span class="attr">contentState</span>:&#123;...state.contentState,<span class="attr">text</span>:action.text&#125;&#125;;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//这里一定不要忘了返回</span></span><br><span class="line">  <span class="keyword">return</span> state;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//创建容器 传一个参数 函数</span></span><br><span class="line"><span class="keyword">let</span> store=createStore(reducer);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Title</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> title=<span class="built_in">document</span>.getElementById(<span class="string">"title"</span>);</span><br><span class="line">  title.innerHTML=store.getState().titleState.text;</span><br><span class="line">  title.style.color=store.getState().titleState.color;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Content</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> content=<span class="built_in">document</span>.getElementById(<span class="string">"content"</span>);</span><br><span class="line">  content.innerHTML=store.getState().contentState.text;</span><br><span class="line">  content.style.color=store.getState().contentState.color;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  Title();</span><br><span class="line">  Content();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">  store.dispatch(&#123;<span class="attr">type</span>:TITLE_CHANGE_TEXT,<span class="attr">text</span>:<span class="string">"前端其实很好玩~"</span>&#125;);</span><br><span class="line">  store.dispatch(&#123;<span class="attr">type</span>:TITLE_CHANGE_COLOR,<span class="attr">color</span>:<span class="string">"blue"</span>&#125;);</span><br><span class="line">  store.dispatch(&#123;<span class="attr">type</span>:CONTENT_CHANGE_TEXT,<span class="attr">text</span>:<span class="string">"html+css+js+node+vue+react"</span>&#125;);</span><br><span class="line">  render();</span><br><span class="line">&#125;,<span class="number">3000</span>);</span><br><span class="line">render();</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>reducer =&gt;一个函数，它接受 Action 和当前 State 作为参数，返回一个新的 State。</strong></li>
+<li><strong>reducer 把修改容器中状态的行为操作统一放到一起进行统一管理</strong></li>
+</ul>
+<hr>
+<p><code>第五次</code></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//订阅事件</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createStore</span>(<span class="params">reducer</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> state,listener=[];</span><br><span class="line">  dispatch(&#123;&#125;);</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span>(<span class="params">action</span>) </span>&#123;</span><br><span class="line">    state=reducer(state,action);</span><br><span class="line">    <span class="comment">//依次让订阅的方法执行</span></span><br><span class="line">    listener.forEach(<span class="function"><span class="params">item</span>=&gt;</span>item());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> subscribe=<span class="function">(<span class="params">fn</span>)=&gt;</span>&#123;</span><br><span class="line">    listener=[...listener,fn];</span><br><span class="line">    <span class="comment">//返回一个函数 取消订阅</span></span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">      <span class="comment">//将数组中的fn删除</span></span><br><span class="line">      listener=listener.filter(<span class="function"><span class="params">item</span>=&gt;</span>item!=fn);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">let</span> getState=<span class="function"><span class="params">()</span>=&gt;</span>(<span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(state)));</span><br><span class="line">  <span class="keyword">return</span> &#123;dispatch,getState,subscribe&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> TITLE_CHANGE_TEXT=<span class="string">"title_change_text"</span>;</span><br><span class="line"><span class="keyword">const</span> TITLE_CHANGE_COLOR=<span class="string">"title_change_color"</span>;</span><br><span class="line"><span class="keyword">const</span> CONTENT_CHANGE_TEXT=<span class="string">"content_change_text"</span>;</span><br><span class="line"><span class="keyword">let</span> initState=&#123;</span><br><span class="line">  titleState:&#123;<span class="attr">text</span>:<span class="string">"前端"</span>,<span class="attr">color</span>:<span class="string">"red"</span>&#125;,</span><br><span class="line">  contentState:&#123;<span class="attr">text</span>:<span class="string">"CSS,HTML,JS,NODE,VUE,REACT"</span>,<span class="attr">color</span>:<span class="string">"green"</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">state=initState,action</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">switch</span> (action.type)&#123;</span><br><span class="line">    <span class="keyword">case</span> TITLE_CHANGE_TEXT:</span><br><span class="line">      <span class="comment">//return 一个修改后的state</span></span><br><span class="line">      <span class="keyword">return</span> &#123;...state,<span class="attr">titleState</span>:&#123;...state.titleState,<span class="attr">text</span>:action.text&#125;&#125;;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> TITLE_CHANGE_COLOR:</span><br><span class="line">      <span class="keyword">return</span> &#123;...state,<span class="attr">titleState</span>:&#123;...state.titleState,<span class="attr">color</span>:action.color&#125;&#125;;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> CONTENT_CHANGE_TEXT:</span><br><span class="line">      <span class="keyword">return</span> &#123;...state,<span class="attr">contentState</span>:&#123;...state.contentState,<span class="attr">text</span>:action.text&#125;&#125;;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> state;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> store=createStore(reducer);</span><br><span class="line"></span><br><span class="line">store.subscribe(render);</span><br><span class="line"><span class="keyword">let</span> unsubscribe=store.subscribe(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"KK好漂亮"</span>);</span><br><span class="line">&#125;);</span><br><span class="line">unsubscribe();</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Title</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> title=<span class="built_in">document</span>.getElementById(<span class="string">"title"</span>);</span><br><span class="line">  title.innerHTML=store.getState().titleState.text;</span><br><span class="line">  title.style.color=store.getState().titleState.color;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Content</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> content=<span class="built_in">document</span>.getElementById(<span class="string">"content"</span>);</span><br><span class="line">  content.innerHTML=store.getState().contentState.text;</span><br><span class="line">  content.style.color=store.getState().contentState.color;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">render</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  Title();</span><br><span class="line">  Content();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span>=&gt;</span>&#123;</span><br><span class="line">  store.dispatch(&#123;<span class="attr">type</span>:TITLE_CHANGE_TEXT,<span class="attr">text</span>:<span class="string">"前端其实很好玩~"</span>&#125;);</span><br><span class="line">  store.dispatch(&#123;<span class="attr">type</span>:TITLE_CHANGE_COLOR,<span class="attr">color</span>:<span class="string">"blue"</span>&#125;);</span><br><span class="line">  store.dispatch(&#123;<span class="attr">type</span>:CONTENT_CHANGE_TEXT,<span class="attr">text</span>:<span class="string">"html+css+js+node+vue+react"</span>&#125;);</span><br><span class="line">&#125;,<span class="number">3000</span>);</span><br><span class="line">render();</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>subscribe  =&gt;设置监听函数，一旦 State 发生变化，就自动执行这个函数。</strong></li>
+<li><strong>发布订阅这个不难理解</strong></li>
+</ul>
+<hr>
+<p>最后，放大招：<br></p>
+<h2>createStore的简单实现</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> createStore = <span class="function">(<span class="params">reducer</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> state;</span><br><span class="line">  <span class="keyword">let</span> listeners = [];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> getState = <span class="function"><span class="params">()</span> =&gt;</span> state;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> dispatch = <span class="function">(<span class="params">action</span>) =&gt;</span> &#123;</span><br><span class="line">    state = reducer(state, action);</span><br><span class="line">    listeners.forEach(<span class="function"><span class="params">listener</span> =&gt;</span> listener());</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> subscribe = <span class="function">(<span class="params">listener</span>) =&gt;</span> &#123;</span><br><span class="line">    listeners.push(listener);</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      listeners = listeners.filter(<span class="function"><span class="params">l</span> =&gt;</span> l !== listener);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  dispatch(&#123;&#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123; getState, dispatch, subscribe &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>等等，还有:</p>
+<h3>combineReducers的简单实现</h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function combineReducers(reducers) &#123;</span><br><span class="line">  return (state=&#123;&#125;,action)=&gt;&#123;</span><br><span class="line">    let obj=&#123;&#125;;</span><br><span class="line">    for (let key in reducers)&#123;</span><br><span class="line">      obj[key]=reducers[key](state[key],action)</span><br><span class="line">    &#125;</span><br><span class="line">    return obj;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>combineReducers()做的就是产生一个整体的 Reducer 函数。该函数根据 State 的 key 去执行相应的子 Reducer，并将返回结果合并成一个大的 State 对象。</p>
+</li>
+<li>
+<p>可以看下一篇的应用来理解~</p>
+</li>
+</ul>
+
+    
+    </div>
+    
+    
+        <div class="article-comment" id='article-comment'>
+            
+
+<h1>Comment</h1>
+
+  
+    <div id="comment-not-available">
+      Not available
+      <p><strong>For site maintainer: Please provide <code>appId</code> and <code>appKey</code> in your <code>_data/cutie.yml</code> file for <code>valine</code> comment system.</strong></p>
+    </div>
+  
+
+
+        </div>
+        
+</article>
+  </div>
+
+  
+
+<footer id='footer'>
+    <div class='footer-copyright'>
+        <div>
+            <p> Copyright by <a href="">靳莹莹 </a> @ 2018</p>
+            <p>Designed by: <i class="fas fa-paint-brush"></i> <a href="https://moober.cn">Moober</a> and <i class="fas fa-graduation-cap"></i> <a href="https://qutang.github.io">Qu Tang</a> &bull; Theme: <a href="https://qutang.github.io/cutie/">Cutie 2.0.13-Taurus</a> &bull; Powered by <a href="http://hexo.io">Hexo.</a></p>
+        </div>
+    </div>
+    
+    <div class='footer-social'>
+        
+    </div>
+</footer>
+
+  <br>
+
+  <div id="footer-nav" class='footer-nav'>
+		
+
+
+
+<nav id="nav">
+	
+	
+	
+	<div class='nav-item' id='nav-item-toc'>
+		
+
+
+<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-number">1.</span> <span class="toc-text">createStore的简单实现</span></a></li></ol>
+<div class="toc-button" onclick='toggleTOC(event);' ontouchstart='toggleTOC(event);'>
+    <img src="/images/icons/blue-shadow/toc.svg" alt="">
+</div>
+
+	</div>
+	
+	<div class='nav-item' id='nav-item-archive'>
+		
+				<div class='nav-icon'>
+				
+			<a href="/archives/" title='Archives'>
+			<img src="/images/icons/blue-shadow/archive.svg" alt="">
+			</a>
+		</div>
+	</div>
+	<div class='nav-item' id='nav-item-search'>
+		
+		<div class='nav-icon'>
+		
+			<a href="/search/" title='Search'>
+			<img src="/images/icons/blue-shadow/search.svg" alt="">
+			</a>
+		</div>
+	</div>
+	<div class="nav-item" id='nav-item-more'>
+		<div class="nav-icon">
+				<a href='#' onclick='onClickMenuIcon(event);' ontouchstart='onClickMenuIcon(event);'>
+				<img src="/images/icons/blue-shadow/menu.svg" alt="">
+				</a>
+		</div>
+		<div class="nav-more-menu">
+		
+		
+	</div>
+	</div>
+</nav>
+
+	</div>
+
+  
+
+
+
+    
+
+
+
+
+
+
+
+    <script src="/js/lightgallery.min.js"></script>
+<script src="/js/lg-zoom.min.js"></script>
+<script type='text/javascript'>
+    $(document).ready(function() {
+        $("#lightgallery").lightGallery(); 
+        $(".article-content img").each(function(){
+            console.log($(this).attr('src'))
+            $(this).attr('data-src', $(this).attr('src')).lightGallery({
+                selector: 'this'
+            })
+        });
+    });
+</script>
+
+
+
+
+
+
+<script type='text/javascript'>
+
+  
+  // update cookie if this page is opened (directly)
+  loadjs(['/libs/jshashes/hashes.min.js', '/libs/js-cookie/src/js.cookie.js', '/js/post.v2.js'], 'post-version');
+  loadjs.ready('post-version', function(){
+    
+    new Postv2('hashit_b5f3ef48b4e314f3cb2501410f04968da51e6b9929dc8fa1f9ef464f0c064ae7').update('hashit_d4d5be61a59a373ac27bcddcc6f721db6336ab6a40e5f0dec7606e78d76a0875', function(){});
+  });
+  
+</script>
+
+
+
+<!-- <script src="/js/post.js"></script> -->
+
+<script src="/js/headroom.min.js"></script>
+
+<script data-no-instant type='text/javascript'>
+
+initHeadroom();
+
+changeLayoutOnTouchScreen();
+
+// 
+// var post = new Post('', '');
+// post.getCommentCount(window.location.pathname, function(count){
+//     $('#article-comment-count').text(count);
+// });
+// post.addVisitRecord(window.location.pathname, userip);
+// post.getVisitCount(window.location.pathname, function(count){
+//     $('#article-visit-count').text(count);
+// });
+
+// 
+</script>
+
+
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>

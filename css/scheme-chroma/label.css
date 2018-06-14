@@ -1,0 +1,229 @@
+.article-meta .tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.article-meta .tags label {
+  padding: 2px;
+  font-size: 0.8em;
+  margin: 3px;
+  border-radius: 5px;
+  display: block;
+}
+.article-meta .tags label a {
+  color: #666;
+}
+.article-meta .tag-1 {
+  border: 2px solid #b6d957;
+  background: #f0f7dd;
+}
+.article-meta .tag-1:hover {
+  background: #b6d957;
+}
+.article-meta .tag-1:hover a {
+  color: #fff;
+}
+.article-meta .tag-2 {
+  border: 2px solid #fac364;
+  background: #fef3e0;
+}
+.article-meta .tag-2:hover {
+  background: #fac364;
+}
+.article-meta .tag-2:hover a {
+  color: #fff;
+}
+.article-meta .tag-3 {
+  border: 2px solid #8cd3ff;
+  background: #e8f6ff;
+}
+.article-meta .tag-3:hover {
+  background: #8cd3ff;
+}
+.article-meta .tag-3:hover a {
+  color: #fff;
+}
+.article-meta .tag-4 {
+  border: 2px solid #d998cb;
+  background: #f7eaf5;
+}
+.article-meta .tag-4:hover {
+  background: #d998cb;
+}
+.article-meta .tag-4:hover a {
+  color: #fff;
+}
+.article-meta .tag-5 {
+  border: 2px solid #f2d249;
+  background: #fcf6db;
+}
+.article-meta .tag-5:hover {
+  background: #f2d249;
+}
+.article-meta .tag-5:hover a {
+  color: #fff;
+}
+.article-meta .tag-6 {
+  border: 2px solid #93b9c6;
+  background: #e9f1f4;
+}
+.article-meta .tag-6:hover {
+  background: #93b9c6;
+}
+.article-meta .tag-6:hover a {
+  color: #fff;
+}
+.article-meta .tag-7 {
+  border: 2px solid #ccc5a8;
+  background: #f5f3ee;
+}
+.article-meta .tag-7:hover {
+  background: #ccc5a8;
+}
+.article-meta .tag-7:hover a {
+  color: #fff;
+}
+.article-meta .tag-8 {
+  border: 2px solid #52bacc;
+  background: #dcf1f5;
+}
+.article-meta .tag-8:hover {
+  background: #52bacc;
+}
+.article-meta .tag-8:hover a {
+  color: #fff;
+}
+.article-meta .tag-9 {
+  border: 2px solid #dbdb46;
+  background: #f8f8da;
+}
+.article-meta .tag-9:hover {
+  background: #dbdb46;
+}
+.article-meta .tag-9:hover a {
+  color: #fff;
+}
+.article-meta .tag-10 {
+  border: 2px solid #98aafb;
+  background: #eaeefe;
+}
+.article-meta .tag-10:hover {
+  background: #98aafb;
+}
+.article-meta .tag-10:hover a {
+  color: #fff;
+}
+.article-meta .tag-11 {
+  border: 2px solid;
+  background: ;
+}
+.article-meta .tag-11:hover {
+  background: ;
+}
+.article-meta .tag-11:hover a {
+  color: #fff;
+}
+.Card-archive .tags {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.Card-archive .tags label {
+  padding: 2px;
+  font-size: 0.8em;
+  border-radius: 5px;
+  display: block;
+}
+.Card-archive .tags label:before {
+  content: "# ";
+}
+.Card-archive .tags label a {
+  color: #fff;
+}
+.Card-archive .tag-1 a:hover {
+  text-decoration: underline;
+}
+.Card-archive .tag-2 a:hover {
+  text-decoration: underline;
+}
+.Card-archive .tag-3 a:hover {
+  text-decoration: underline;
+}
+.Card-archive .tag-4 a:hover {
+  text-decoration: underline;
+}
+.Card-archive .tag-5 a:hover {
+  text-decoration: underline;
+}
+.Card-archive .tag-6 a:hover {
+  text-decoration: underline;
+}
+.Card-archive .tag-7 a:hover {
+  text-decoration: underline;
+}
+.Card-archive .tag-8 a:hover {
+  text-decoration: underline;
+}
+.Card-archive .tag-9 a:hover {
+  text-decoration: underline;
+}
+.Card-archive .tag-10 a:hover {
+  text-decoration: underline;
+}
+.Card-archive .tag-11 a:hover {
+  text-decoration: underline;
+}
+.Card .tags {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.Card .tags label {
+  text-align: right;
+  padding: 2px;
+  font-size: 0.8em;
+  margin: 3px;
+  display: block;
+}
+.Card .tags label:before {
+  content: "# ";
+}
+.Card .tags label a {
+  color: #fff;
+}
+.Card .tag-1 a:hover {
+  text-decoration: underline;
+}
+.Card .tag-2 a:hover {
+  text-decoration: underline;
+}
+.Card .tag-3 a:hover {
+  text-decoration: underline;
+}
+.Card .tag-4 a:hover {
+  text-decoration: underline;
+}
+.Card .tag-5 a:hover {
+  text-decoration: underline;
+}
+.Card .tag-6 a:hover {
+  text-decoration: underline;
+}
+.Card .tag-7 a:hover {
+  text-decoration: underline;
+}
+.Card .tag-8 a:hover {
+  text-decoration: underline;
+}
+.Card .tag-9 a:hover {
+  text-decoration: underline;
+}
+.Card .tag-10 a:hover {
+  text-decoration: underline;
+}
+.Card .tag-11 a:hover {
+  text-decoration: underline;
+}
