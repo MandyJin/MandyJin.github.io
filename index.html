@@ -149,6 +149,32 @@ crossorigin="anonymous"></script>
 
 
 
+<script type='text/javascript' src='/libs/noty/lib/noty.min.js'></script>
+<script>
+    loadjs(['/libs/noty/lib/noty.min.js', '/libs/jshashes/hashes.min.js', '/libs/js-cookie/src/js.cookie.js', '/js/announcement.js'], 'announcement');
+    loadjs.ready('announcement', {
+      success: function(){
+        new Announcement('This is a sample site announcement.').show();
+      },
+      error: function(err){
+        console.log(err);
+      }
+    });
+</script>
+
+<style>
+  #announcement{
+    width: 40vw;
+    padding: 0.1em;
+  }
+  #announcement a:link{
+    color: white
+  }
+  #announcement a:visited{
+    color: white
+  }
+</style>
+
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -480,6 +506,16 @@ crossorigin="anonymous"></script>
     </div>
     
     <div class='footer-social'>
+        
+            
+                
+                    <div class='footer-social-item'><a href='https://github.com/qutang' target='_blank' ><i class="fab fa-github fa-2x" aria-hidden="true"></i></a></div>
+                
+            
+                
+                    <div class='footer-social-item'><a href='https://www.linkedin.com/in/qutang' target='_blank' ><i class="fab fa-linkedin fa-2x" aria-hidden="true"></i></a></div>
+                
+            
         
     </div>
 </footer>
